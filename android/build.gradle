@@ -1,0 +1,40 @@
+// android/build.gradle
+
+buildscript {
+    ext {
+        // Define versions for dependencies
+        minSdkVersion = 21
+        compileSdkVersion = 34
+    }
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        // Specify the Android Gradle Plugin version
+        classpath 'com.android.tools.build:gradle:8.1.2'  // Update this based on your requirements
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+// Configure custom build directories
+rootProject.buildDir = "../build"
+subprojects {
+    project.buildDir = "${rootProject.buildDir}/${project.name}"
+}
+
+// Force evaluation dependency
+subprojects {
+    project.evaluationDependsOn(":app")
+}
+
+// Custom clean task
+tasks.register("clean", Delete) {
+    delete rootProject.buildDir
+}
