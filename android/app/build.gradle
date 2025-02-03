@@ -1,0 +1,70 @@
+plugins {
+    id "com.android.application"
+    id "kotlin-android"
+    // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
+    id "dev.flutter.flutter-gradle-plugin"
+}
+
+def keystoreProperties = new Properties()
+def keystorePropertiesFile = rootProject.file('key.properties')
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+}
+
+android {
+    namespace = "com.nscspl.eHRNatural"
+    compileSdk = 34
+    ndkVersion = flutter.ndkVersion
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8
+    }
+
+    defaultConfig {
+        applicationId = "com.nscspl.eHRNatural" // Unique Application ID
+        minSdkVersion 21 // Minimum SDK version
+        targetSdkVersion 34 // Target SDK version
+        versionCode 61// Version code
+        versionName "13.25" // Version name
+
+    }
+
+    signingConfigs {
+        release {
+            keyAlias = keystoreProperties['keyAlias']
+            keyPassword = keystoreProperties['keyPassword']
+            storeFile = keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
+            storePassword = keystoreProperties['storePassword']
+        }
+    }
+
+    buildTypes {
+        release {
+
+            signingConfig = signingConfigs.release
+            
+            minifyEnabled false // Enable code shrinking, obfuscation, and optimization
+            shrinkResources false // Enable resource shrinking
+
+            // ProGuard configuration files
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
+             // Use release signing configuration
+        }
+    }
+}
+
+dependencies {
+    implementation "com.google.android.material:material:1.12.0" // Material Components library
+    implementation 'androidx.core:core-ktx:1.10.1' // Core KTX library
+    implementation 'androidx.appcompat:appcompat:1.6.1' // AppCompat library
+}
+
+flutter {
+    source = "../.." // Path to Flutter source
+}
